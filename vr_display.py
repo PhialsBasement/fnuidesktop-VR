@@ -180,6 +180,13 @@ class VRDesktopViewer:
         if self.left_id is None or self.right_id is None:
             return
 
+        # Ensure OpenGL context is current
+        glfw.make_context_current(self.window)
+
+        # Clear any existing OpenGL errors
+        while glGetError() != GL_NO_ERROR:
+            pass
+
         # Create texture for pointer - a simple colored rectangle
         # Width x Height - will be stretched along the ray
         width = 4
@@ -254,6 +261,10 @@ class VRDesktopViewer:
             )
             self.vroverlay.showOverlay(ptr_front)
             self.vroverlay.showOverlay(ptr_back)
+
+        # Clear any OpenGL errors from OpenVR calls
+        while glGetError() != GL_NO_ERROR:
+            pass
 
         # Create cursor texture (circle)
         cursor_size = 32
@@ -848,8 +859,14 @@ class VRDesktopViewer:
         return 0
 
     def cleanup(self):
+        if self.window:
+            glfw.make_context_current(self.window)
         if self.texture_id:
             glDeleteTextures(1, [self.texture_id])
+        if self.pointer_tex_id:
+            glDeleteTextures(1, [self.pointer_tex_id])
+        if self.cursor_tex_id:
+            glDeleteTextures(1, [self.cursor_tex_id])
         if self.shm:
             self.shm.close()
         if self.shm_fd:

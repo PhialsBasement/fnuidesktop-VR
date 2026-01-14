@@ -23,7 +23,7 @@ Virtual Desktop alternative for Linux/Wayland. Mirrors your desktop to a SteamVR
 ### Python packages
 
 ```
-pip install openvr numpy PyOpenGL glfw pynput
+pip install openvr numpy PyOpenGL glfw pynput pycairo PyGObject
 ```
 
 ### System packages (Arch)
